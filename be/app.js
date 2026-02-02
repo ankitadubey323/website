@@ -724,21 +724,18 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// ---------------- MIDDLEWARE ----------------
+-
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
+
 app.use(
   cors({
-<<<<<<< HEAD
-    origin: "https://website-1-uram.onrender.com",
-=======
-    origin: "https://website-1-uram.onrender.",
->>>>>>> 2243d66 (fix -call)
+    origin: "*",
+    methods: ["GET", "POST"],
   })
 );
 
-// ---------------- DB ----------------
+
 connection();
 
 
@@ -753,13 +750,13 @@ const boltLimiter = rateLimit({
   },
 });
 
-// ---------------- OPENAI (GROQ) ----------------
+
 const client = new OpenAI({
   apiKey: process.env.GROQ_KEY,
   baseURL: "https://api.groq.com/openai/v1",
 });
 
-// ---------------- HEALTH CHECK ----------------
+
 // app.get("/api/test", (req, res) => {
 //   res.json({
 //     success: true,
@@ -767,7 +764,7 @@ const client = new OpenAI({
 //   });
 // });
 
-// // ---------------- BOLT API ----------------
+
 // app.post("/api/bolt", async (req, res) => {
 //   try {
 //     const { prompt } = req.body;
@@ -815,6 +812,10 @@ const client = new OpenAI({
 // });
 
 import { extractJSON } from "./src/utils/extractJson.js";
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
+
 
 app.post("/api/bolt", boltLimiter, async (req, res) => {
   try {
